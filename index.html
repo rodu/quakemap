@@ -11,7 +11,7 @@
 
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
-    <title>Non-responsive Template for Bootstrap</title>
+    <title>QuakeMap - Real-time Earthquake Visualizer</title>
 
     <!-- Bootstrap core CSS -->
     <link href="./lib/bootstrap.min.css" rel="stylesheet">
@@ -25,12 +25,6 @@
     <link href="./lib/leaflet.css" rel="stylesheet">
 
     <style type="text/css">
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      }
-
       #map { height: 700px; }
     </style>
 
@@ -91,8 +85,12 @@
     <div class="container">
 
       <div class="page-header">
-        <h1>Non-responsive Bootstrap</h1>
-        <p class="lead">Disable the responsiveness of Bootstrap by fixing the width of the container and using the first grid system tier. <a href="http://getbootstrap.com/getting-started/#disable-responsive">Read the documentation</a> for more information.</p>
+        <h1>QuakeMap - Real-time Earthquake Visualizer</h1>
+        <p class="lead">
+        Using the data provided by <a href="http://earthquake.usgs.gov/earthquakes/">USGS</a>
+        this simple app shows on a map the latest earthquakes happened on a world-wide scale.
+
+        </p>
       </div>
 
       <div id="map"></div>
@@ -117,6 +115,6 @@
     <script src="./lib/rx.all.js"></script>
     <script src="./lib/rx.dom.js"></script>
     <script src="./lib/leaflet.js"></script>
-    <script src="visualquake.js"></script>
+    <script src="quakemap.js"></script>
 
 </body></html>
