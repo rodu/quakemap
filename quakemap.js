@@ -3,12 +3,14 @@
   'use strict';
 
   const QUAKE_URL = (
-    'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojsonp'
+    '//earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojsonp'
     //'http://localhost:8080/all_day.geojsonp'
   );
   const map = L.map('map');
 
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+  L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
 
   const quakes = Rx.DOM.jsonpRequest({
     url: QUAKE_URL,
