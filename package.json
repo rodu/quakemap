@@ -2,12 +2,20 @@
   "name": "visualquake",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "quakemap.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "eslint *.js && babel quakemap.js --out-file quakemap.bundle.js",
     "start": "http-server"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "eslint": "^3.9.0",
+    "eslint-config-google": "^0.7.0"
+  }
 }
