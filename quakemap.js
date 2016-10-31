@@ -2,11 +2,11 @@
 (function(Rx){
   'use strict';
 
-  var QUAKE_URL = (
-    'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojsonp'
-    //'http://localhost:8080/all_day.geojsonp'
+  const QUAKE_URL = (
+    //'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojsonp'
+    'http://localhost:8080/all_day.geojsonp'
   );
-  var map = L.map('map').setView([42.6117094, 13.1069955], 10);
+  const map = L.map('map').setView([42.6117094, 13.1069955], 10);
 
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 
@@ -14,11 +14,11 @@
     url: QUAKE_URL,
     jsonpCallback: 'eqfeed_callback'
   })
-  .flatMap(function (result) {
+  .flatMap((result) => {
     return Rx.Observable.from(result.response.features);
   })
-  .map(function (quake) {
-    var properties = quake.properties;
+  .map((quake) => {
+    const properties = quake.properties;
 
     return {
       lat: quake.geometry.coordinates[1],
@@ -28,8 +28,8 @@
       time: new Date(properties.time).toUTCString()
     };
   })
-  .subscribe(function (quake) {
-    var popupData = '' +
+  .subscribe((quake) => {
+    const popupData = '' +
       '<h3>' + quake.place + '</h3>' +
       '<ul>' +
         '<li><strong>Time:</strong> ' + quake.time + '</li>' +
