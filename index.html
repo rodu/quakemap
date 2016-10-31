@@ -26,6 +26,14 @@
 
     <style type="text/css">
       #map { height: 500px; }
+      .show-filter {
+        width: 100;
+        padding: 10px;
+        text-align: right;
+      }
+      .show-filter .filter-title {
+        margin-right: 10px;
+      }
     </style>
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
@@ -94,7 +102,17 @@
       </div>
 
       <div id="map"></div>
-
+      <div class="show-filter">
+        <form>
+          <span class="filter-title"><strong>Show</strong></span>
+          <label class="radio-inline">
+            <input checked="true" type="radio" name="show-filter" value="mag"> Strongest
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="show-filter" value="time"> Latest
+          </label>
+        </form>
+      </div>
       <h3>Non-responsive grid system</h3>
       <div class="row">
         <div class="col-xs-4">One third</div>
