@@ -3,8 +3,8 @@
   'use strict';
 
   const QUAKE_URL = (
-    '//earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojsonp'
-    //'http://localhost:8080/all_day.geojsonp'
+    //'//earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojsonp'
+    'http://localhost:8080/all_day.geojsonp'
   );
   const map = L.map('map');
 

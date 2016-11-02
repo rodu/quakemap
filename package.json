@@ -6,19 +6,18 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "eslint quakemap.js && babel quakemap.js --out-file quakemap.bundle.js",
-    "start": "http-server"
+    "build": "eslint quakemap.js && webpack -p",
+    "start": "webpack-dev-server -d --inline"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.7",
     "babel-preset-es2015": "^6.18.0",
     "eslint": "^3.9.0",
     "eslint-config-google": "^0.7.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-rename": "^1.2.2"
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
   }
 }
