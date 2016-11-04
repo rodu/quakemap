@@ -1,13 +1,50 @@
+import { strongestSoFar, latestSoFar } from '../utils/quakesDataUtils';
+
 /**
 * @ngdoc directive
 * @name dashboard.directive:viewSelector
 * @description
 * Description of the viewSelector directive.
 */
-viewSelectorController.$inject = [];
-function viewSelectorController(){
-  this.$onInit = () => {
+viewSelectorController.$inject = [
+  'quakesService',
+  'lodash',
+  'jquery',
+  'mapUtils'
+];
+function viewSelectorController(quakesService, _, $, mapUtils){
 
+  this.$onInit = () => {
+    const quakesStream = quakesService.getQuakesStream();
+    let strongest;
+    let latest;
+
+    quakesStream
+      .scan(strongestSoFar)
+      .sample(250)
+      .subscribe((quake) => {
+        strongest = _.clone(quake);
+      });
+
+    quakesStream
+      .scan(latestSoFar)
+      .sample(250)
+      .subscribe((quake) => {
+        latest = _.clone(quake);
+      });
+
+    $('[name="show-filter"]').on('change', (event) => {
+
+      const map = mapUtils.getMapReference();
+
+      switch(event.target.value){
+        case 'mag':
+          map.setView([strongest.lat, strongest.lng], 7);
+        break;
+        case 'time':
+          map.setView([latest.lat, latest.lng], 7);
+      }
+    });
   };
 
   this.$onDestroy = () => {};

@@ -10,6 +10,7 @@ const shims = angular.module('shims', [])
   .value('leaflet', window.L)
   .value('lodash', window._)
   .value('Rx', window.Rx)
+  .value('jquery', window.jQuery)
   .name;
 
 export default shims;

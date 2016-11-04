@@ -1,3 +1,5 @@
+import { strongestSoFar } from '../utils/quakesDataUtils';
+
 /**
 * @ngdoc directive
 * @name dashboard.directive:map
@@ -5,8 +7,8 @@
 * Description of the map directive.
 */
 
-MapController.$inject = ['leaflet', 'quakesService'];
-function MapController(L, quakesService){
+MapController.$inject = ['leaflet', 'quakesService', 'mapUtils'];
+function MapController(L, quakesService, mapUtils){
   let map;
   let markers;
   let circles;
@@ -38,12 +40,8 @@ function MapController(L, quakesService){
     map.setView([quake.lat, quake.lng], 7);
   };
 
-  const strongestSoFar = (acc = { mag: 0 }, val) => {
-    return val.mag > acc.mag ? val : acc;
-  };
-
   this.$onInit = () => {
-    map = L.map('map');
+    map = mapUtils.shareMapReference(L.map('map'));
     markers = {};
     circles = {};
 
