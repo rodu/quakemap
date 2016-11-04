@@ -5,8 +5,8 @@
 * Description of the map directive.
 */
 
-MapController.$inject = ['leaflet'];
-function MapController(L){
+MapController.$inject = ['leaflet', 'quakesService'];
+function MapController(L, quakesService){
   let map;
   let markers;
   let circles;
@@ -22,6 +22,11 @@ function MapController(L){
         contributors
       `
     }).addTo(map);
+
+    quakesService.loadQuakes()
+      .subscribe((value) => {
+        console.log(value);
+      });
   };
 }
 
