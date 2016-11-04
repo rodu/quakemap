@@ -19,8 +19,6 @@ module.exports = {
     md5: 'md5'
   },
   plugins: [
-    babel({
-      exclude: 'node_modules/**'
-    })
+    babel({ runtimeHelpers: true })
   ]
 };
