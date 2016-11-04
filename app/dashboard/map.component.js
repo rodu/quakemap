@@ -5,8 +5,8 @@
 * Description of the map directive.
 */
 
-MapController.$inject = ['leaflet', 'quakesService', 'lodash'];
-function MapController(L, quakesService, _){
+MapController.$inject = ['leaflet', 'quakesService'];
+function MapController(L, quakesService){
   let map;
   let markers;
   let circles;
@@ -34,20 +34,12 @@ function MapController(L, quakesService, _){
 
   // Waits for a whole stream of quakes to come in before setting the map on the
   // coordinates of the strongest quake.
-  const setViewOnStrongest = _.debounce((quake) => {
+  const setViewOnStrongest = (quake) => {
     map.setView([quake.lat, quake.lng], 7);
-  }, 250);
+  };
 
-  const strongestSoFar = (quake) => {
-    if (!strongestQuake){
-      strongestQuake = quake;
-      return;
-    }
-
-    if (quake.mag > strongestQuake.mag){
-      setViewOnStrongest(quake);
-      strongestQuake = quake;
-    }
+  const strongestSoFar = (acc = { mag: 0 }, val) => {
+    return val.mag > acc.mag ? val : acc;
   };
 
   this.$onInit = () => {
@@ -66,7 +58,11 @@ function MapController(L, quakesService, _){
 
     const quakesStream = quakesService.getQuakesStream();
 
-    quakesStream.subscribe(strongestSoFar);
+    quakesStream
+      .scan(strongestSoFar)
+      .sample(250)
+      .subscribe(setViewOnStrongest);
+
     quakesStream.subscribe(drawQuake);
   };
 }
