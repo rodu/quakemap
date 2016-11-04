@@ -19,35 +19,51 @@ function viewSelectorController(quakesService, _, $, mapUtils){
     let strongest;
     let latest;
 
-    quakesStream
+    const onStrongest = quakesStream
       .scan(strongestSoFar)
       .sample(250)
       .subscribe((quake) => {
         strongest = _.clone(quake);
       });
 
-    quakesStream
+    const onLatest = quakesStream
       .scan(latestSoFar)
       .sample(250)
       .subscribe((quake) => {
         latest = _.clone(quake);
       });
 
-    $('[name="show-filter"]').on('change', (event) => {
+    const byValue = function(event){
+      return this === event.target.value;
+    }
 
-      const map = mapUtils.getMapReference();
+    const $radios = $('[name="show-filter"]');
+    const radioChanges = Rx.Observable.fromEvent($radios, 'change');
 
-      switch(event.target.value){
-        case 'mag':
-          map.setView([strongest.lat, strongest.lng], 7);
-        break;
-        case 'time':
-          map.setView([latest.lat, latest.lng], 7);
-      }
-    });
+    const onMagFilter = radioChanges
+      .filter(byValue, 'mag')
+      .subscribe(() => {
+        mapUtils
+          .getMapReference()
+          .setView([strongest.lat, strongest.lng], 7);
+      });
+
+    const onTimeFilter = radioChanges
+      .filter(byValue, 'time')
+      .subscribe(() => {
+        mapUtils
+          .getMapReference()
+          .setView([latest.lat, latest.lng], 7);
+      });
   };
 
-  this.$onDestroy = () => {};
+  this.$onDestroy = () => {
+    // Disposes all subscriptions
+    onStrongest.dispose();
+    onLatest.dispose();
+    onMagFilter.dispose();
+    onTimeFilter.dispose();
+  };
 }
 
 const viewSelector = {
