@@ -1,8 +1,14 @@
 module.exports = {
-  entry: './quakemap.js',
+  entry: './app/quakemap.js',
   output: {
     path: __dirname,
     filename: 'quakemap.bundle.js'
+  },
+  external: {
+    angular: 'angular',
+    jquery: 'jQuery',
+    lodash: '_',
+    rx: 'Rx'
   },
   module: {
     loaders: [{

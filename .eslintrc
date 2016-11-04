@@ -5,6 +5,7 @@
   "env": {
     "browser": 1,
     "jasmine": 1,
+    "sourceType": "module"
   },
   "globals": {
     "angular": 1,
