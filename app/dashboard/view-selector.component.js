@@ -25,7 +25,7 @@ function ViewSelectorController(quakesService, _, $){
       return this === event.target.value;
     };
 
-    /*radioChanges
+    radioChanges
       .filter(byValue, 'mag')
       .merge(quakesStream)
       .scan(strongestSoFar)
@@ -37,25 +37,9 @@ function ViewSelectorController(quakesService, _, $){
       .merge(quakesStream)
       .scan(latestSoFar)
       .sample(250)
-      .subscribe(radioFilterSubject);*/
-
-    radioChanges
-      .filter(byValue, 'mag')
-      .subscribe(() => {
-        quakesStream
-          .scan(strongestSoFar)
-          .sample(250)
-          .subscribe(radioFilterSubject);
-      });
-
-    radioChanges
-      .filter(byValue, 'time')
-      .subscribe(() => {
-        quakesStream
-          .scan(latestSoFar)
-          .sample(250)
-          .subscribe(radioFilterSubject);
-      });
+      // skips the first value to let the mag observer value only to go through
+      .skip(1)
+      .subscribe(radioFilterSubject);
   };
 
   this.$onDestroy = () => {};
