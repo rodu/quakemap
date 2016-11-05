@@ -8,15 +8,9 @@ module.exports = {
   sourceMap: 'inline',
   globals: {
     angular: 'angular',
-    redux: 'Redux',
-    d3: 'd3',
     lodash: '_',
     jquery: 'jQuery',
-    audio: 'audiojs',
-    chrome: 'chrome',
-    musicmetadata: 'musicmetadata',
-    postal: 'postal',
-    md5: 'md5'
+    rx: 'Rx'
   },
   plugins: [
     babel({ runtimeHelpers: true })

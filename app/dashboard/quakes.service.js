@@ -1,5 +1,3 @@
-import angular from 'angular';
-
 quakesService.$inject = ['Rx'];
 function quakesService(Rx){
 
@@ -10,7 +8,7 @@ function quakesService(Rx){
     'http://localhost:8080/all_day.geojsonp'
   );
 
-  function getQuakesStream() {
+  function getQuakesStream(){
     const jsonStream = () => {
       return Rx.DOM.jsonpRequest({
         url: QUAKE_URL,

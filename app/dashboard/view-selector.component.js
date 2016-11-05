@@ -1,4 +1,5 @@
 import { strongestSoFar, latestSoFar } from '../utils/quakesDataUtils';
+import radioFilterSubject from './radioFilterSubject';
 
 /**
 * @ngdoc directive
@@ -6,64 +7,58 @@ import { strongestSoFar, latestSoFar } from '../utils/quakesDataUtils';
 * @description
 * Description of the viewSelector directive.
 */
-viewSelectorController.$inject = [
+ViewSelectorController.$inject = [
   'quakesService',
   'lodash',
-  'jquery',
-  'mapUtils'
+  'jquery'
 ];
-function viewSelectorController(quakesService, _, $, mapUtils){
+function ViewSelectorController(quakesService, _, $){
 
   this.$onInit = () => {
     const quakesStream = quakesService.getQuakesStream();
-    let strongest;
-    let latest;
-
-    const onStrongest = quakesStream
-      .scan(strongestSoFar)
-      .sample(250)
-      .subscribe((quake) => {
-        strongest = _.clone(quake);
-      });
-
-    const onLatest = quakesStream
-      .scan(latestSoFar)
-      .sample(250)
-      .subscribe((quake) => {
-        latest = _.clone(quake);
-      });
-
-    const byValue = function(event){
-      return this === event.target.value;
-    }
 
     const $radios = $('[name="show-filter"]');
     const radioChanges = Rx.Observable.fromEvent($radios, 'change');
 
-    const onMagFilter = radioChanges
+    const byValue = function(event){
+      /* eslint no-invalid-this:0 */
+      return this === event.target.value;
+    };
+
+    /*radioChanges
+      .filter(byValue, 'mag')
+      .merge(quakesStream)
+      .scan(strongestSoFar)
+      .sample(250)
+      .subscribe(radioFilterSubject);
+
+    radioChanges
+      .filter(byValue, 'time')
+      .merge(quakesStream)
+      .scan(latestSoFar)
+      .sample(250)
+      .subscribe(radioFilterSubject);*/
+
+    radioChanges
       .filter(byValue, 'mag')
       .subscribe(() => {
-        mapUtils
-          .getMapReference()
-          .setView([strongest.lat, strongest.lng], 7);
+        quakesStream
+          .scan(strongestSoFar)
+          .sample(250)
+          .subscribe(radioFilterSubject);
       });
 
-    const onTimeFilter = radioChanges
+    radioChanges
       .filter(byValue, 'time')
       .subscribe(() => {
-        mapUtils
-          .getMapReference()
-          .setView([latest.lat, latest.lng], 7);
+        quakesStream
+          .scan(latestSoFar)
+          .sample(250)
+          .subscribe(radioFilterSubject);
       });
   };
 
-  this.$onDestroy = () => {
-    // Disposes all subscriptions
-    onStrongest.dispose();
-    onLatest.dispose();
-    onMagFilter.dispose();
-    onTimeFilter.dispose();
-  };
+  this.$onDestroy = () => {};
 }
 
 const viewSelector = {
@@ -72,7 +67,10 @@ const viewSelector = {
       <form>
         <span class="filter-title"><strong>Show</strong></span>
         <label class="radio-inline">
-          <input checked="true" type="radio" name="show-filter" value="mag"> Strongest
+          <input checked="true"
+            type="radio"
+            name="show-filter"
+            value="mag"> Strongest
         </label>
         <label class="radio-inline">
           <input type="radio" name="show-filter" value="time"> Latest
@@ -80,7 +78,7 @@ const viewSelector = {
       </form>
     </div>
   `,
-  controller: viewSelectorController,
+  controller: ViewSelectorController,
   controllerAs: 'viewSelector',
   bindings: {}
 };

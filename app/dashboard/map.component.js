@@ -1,4 +1,5 @@
 import { strongestSoFar } from '../utils/quakesDataUtils';
+import radioFilterSubject from './radioFilterSubject';
 
 /**
 * @ngdoc directive
@@ -7,12 +8,11 @@ import { strongestSoFar } from '../utils/quakesDataUtils';
 * Description of the map directive.
 */
 
-MapController.$inject = ['leaflet', 'quakesService', 'mapUtils'];
-function MapController(L, quakesService, mapUtils){
+MapController.$inject = ['leaflet', 'quakesService'];
+function MapController(L, quakesService){
   let map;
   let markers;
   let circles;
-  let strongestQuake;
 
   const drawQuake = (quake) => {
     const popupData = '' +
@@ -41,7 +41,7 @@ function MapController(L, quakesService, mapUtils){
   };
 
   this.$onInit = () => {
-    map = mapUtils.shareMapReference(L.map('map'));
+    map = L.map('map');
     markers = {};
     circles = {};
 
@@ -62,6 +62,12 @@ function MapController(L, quakesService, mapUtils){
       .subscribe(setViewOnStrongest);
 
     quakesStream.subscribe(drawQuake);
+
+    radioFilterSubject.subscribe((quake) => {
+      if (quake){
+        map.setView([quake.lat, quake.lng], 7);
+      }
+    });
   };
 }
 

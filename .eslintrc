@@ -1,11 +1,11 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 6,
+    "sourceType": "module"
   },
   "env": {
     "browser": 1,
-    "jasmine": 1,
-    "sourceType": "module"
+    "jasmine": 1
   },
   "globals": {
     "angular": 1,
