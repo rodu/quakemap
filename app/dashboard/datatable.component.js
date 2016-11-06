@@ -30,9 +30,13 @@ function datatable($timeout, $filter, quakesService){
       .bufferWithTime(500)
       .filter((value) => value.length)
       .subscribe((quakes) => {
-        $scope.quakes = quakes.map(formatDate);
+        // Subsequent data stream will bring in only the new quakes we don't yet
+        // have, therefore we concat the new data to the existing ones.
+        $scope.quakes = $scope.quakes.concat(quakes.map(formatDate));
         $scope.$apply();
+
         /* eslint new-cap:0 */
+        // Sorts the table by the magnitude column
         $table.DataTable()
           .column('2:visible')
           .order('desc')
