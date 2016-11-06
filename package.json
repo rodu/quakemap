@@ -19,6 +19,7 @@
     "eslint": "^3.9.0",
     "eslint-config-google": "^0.7.0",
     "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
     "gulp-connect": "^5.0.0",
     "rollup": "^0.36.3",
     "rollup-plugin-babel": "^2.6.1",
