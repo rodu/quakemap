@@ -41,7 +41,7 @@ function quakesService(Rx){
 
   return {
     getQuakesStream
-  }
+  };
 }
 
 export default quakesService;
