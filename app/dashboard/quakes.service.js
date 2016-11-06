@@ -37,6 +37,9 @@ function quakesService(Rx){
           time: feature.properties.time,
           tz: feature.properties.tz
         };
+      })
+      .filter((quake) => {
+        return quake.mag >= 1;
       });
 
     return quakeStream;
