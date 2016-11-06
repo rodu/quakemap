@@ -4,8 +4,8 @@
 * @description
 * Description of the datatable directive.
 */
-datatable.$inject = ['$timeout', 'quakesService'];
-function datatable($timeout, quakesService){
+datatable.$inject = ['$timeout', '$filter', 'quakesService'];
+function datatable($timeout, $filter, quakesService){
 
   const scope = {};
 
@@ -13,17 +13,18 @@ function datatable($timeout, quakesService){
     $scope.quakes = [];
 
     const quakesStream = quakesService.getQuakesStream();
-
-    const renderTable = (quakes) => {
-      console.log(quakes);
-      $scope.quakes = quakes;
+    const dateFilter = $filter('date');
+    const formatDate = (quake) => {
+      return Object.assign({}, quake, {
+        time: dateFilter(quake.time, 'MMM dd, yyyy - HH:mm Z UTC', String(quake.tz))
+      });
     };
 
     quakesStream
       .bufferWithTime(500)
       .filter((value) => value.length)
       .subscribe((quakes) => {
-        $scope.quakes = quakes;
+        $scope.quakes = quakes.map(formatDate);
         $scope.$apply();
       });
 

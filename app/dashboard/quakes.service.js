@@ -31,8 +31,10 @@ function quakesService(Rx){
           lat: feature.geometry.coordinates[1],
           lng: feature.geometry.coordinates[0],
           mag: feature.properties.mag,
+          code: feature.properties.code,
           place: feature.properties.place,
-          time: feature.properties.time
+          time: feature.properties.time,
+          tz: feature.properties.tz
         };
       });
 
