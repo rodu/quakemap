@@ -9,14 +9,20 @@ function datatable($timeout, $filter, quakesService){
 
   const scope = {};
 
-  function link($scope){
+  function link($scope, $element){
+    const $table = $element.find('table');
     $scope.quakes = [];
 
     const quakesStream = quakesService.getQuakesStream();
+
     const dateFilter = $filter('date');
     const formatDate = (quake) => {
       return Object.assign({}, quake, {
-        time: dateFilter(quake.time, 'MMM dd, yyyy - HH:mm Z UTC', String(quake.tz))
+        time: dateFilter(
+          quake.time,
+          'MMM dd, yyyy - HH:mm Z UTC',
+          String(quake.tz)
+        )
       });
     };
 
@@ -26,6 +32,11 @@ function datatable($timeout, $filter, quakesService){
       .subscribe((quakes) => {
         $scope.quakes = quakes.map(formatDate);
         $scope.$apply();
+        /* eslint new-cap:0 */
+        $table.DataTable()
+          .column('2:visible')
+          .order('desc')
+          .draw();
       });
 
     $scope.$on('$destroy', () => {
@@ -37,10 +48,7 @@ function datatable($timeout, $filter, quakesService){
     restrict: 'E',
     template: `
       <div>
-        <table datatable="ng"
-          dt-options="showCase.dtOptions"
-          dt-columns="showCase.dtColumns"
-          class="table table-striped table-hover">
+        <table datatable="ng" class="table table-striped table-hover">
           <thead>
             <tr>
               <th>Location</th>
