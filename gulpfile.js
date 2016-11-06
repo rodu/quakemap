@@ -10,7 +10,20 @@ gulp.task('html', function () {
   gulp.src(HTML_FILES).pipe(connect.reload());
 });
 
-gulp.task('vendors', function () {
+gulp.task('concat-css', function () {
+  return gulp.src([
+      './lib/bootstrap.min.css',
+      './lib/ie10-viewport-bug-workaround.css',
+      './lib/non-responsive.css',
+      './lib/leaflet.css',
+      './lib/angular-datatables.min.css',
+      './lib/datatables.bootstrap.min.css'
+    ])
+    .pipe(concat('vendors.bundle.css'))
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('concat-scripts', function () {
   return gulp.src([
       './lib/jquery.min.js',
       './lib/jquery.dataTables.min.js',
@@ -26,7 +39,6 @@ gulp.task('vendors', function () {
     ])
     .pipe(concat('vendors.bundle.js'))
     .pipe(gulp.dest('.'));
-
 });
 
 gulp.task('serve', function() {
@@ -48,7 +60,10 @@ gulp.task('watch', function () {
   gulp.watch(HTML_FILES, ['html']);
 });
 
+gulp.task('vendors', ['concat-scripts', 'concat-css']);
+
 gulp.task('build', ['vendors', 'bundle']);
+
 gulp.task('development', ['build', 'serve', 'watch']);
 
 gulp.task('default', ['build']);
