@@ -20,7 +20,7 @@ function datatable($timeout, $filter, quakesService){
       return Object.assign({}, quake, {
         time: dateFilter(
           quake.time,
-          'MMM dd, yyyy - HH:mm Z UTC',
+          'MMM dd, yyyy - HH:mm UTCZ',
           String(quake.tz)
         )
       });
@@ -54,7 +54,7 @@ function datatable($timeout, $filter, quakesService){
               <th>Location</th>
               <th>Time</th>
               <th>Magnitude</th>
-              <th>Details</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -62,7 +62,7 @@ function datatable($timeout, $filter, quakesService){
               <td>{{quake.place}}</td>
               <td>{{quake.time}}</td>
               <td>{{quake.mag}}</td>
-              <td>{{quake.link}}</td>
+              <td><a href="{{quake.url}}" target="_blank">More details</a></td>
             </tr>
           </tbody>
         </table>

@@ -33,6 +33,7 @@ function quakesService(Rx){
           mag: feature.properties.mag,
           code: feature.properties.code,
           place: feature.properties.place,
+          url: feature.properties.url,
           time: feature.properties.time,
           tz: feature.properties.tz
         };
