@@ -1,4 +1,3 @@
-import { strongestSoFar } from '../utils/quakesDataUtils';
 import radioFilterSubject from './radioFilterSubject';
 
 /**
@@ -10,40 +9,33 @@ import radioFilterSubject from './radioFilterSubject';
 
 MapController.$inject = ['leaflet', 'quakesService'];
 function MapController(L, quakesService){
-  let map;
-  let markers;
-  let circles;
-
-  const drawQuake = (quake) => {
-    const popupData = '' +
-      '<h3>' + quake.place + '</h3>' +
-      '<ul>' +
-        '<li><strong>Time:</strong> ' +
-          new Date(quake.time).toUTCString() +
-        '</li>' +
-        '<li><strong>Magnitude:</strong> ' + quake.mag + '</li>' +
-      '</ul>';
-
-    circles[quake.code] = L.circle(
-      [quake.lat, quake.lng],
-      quake.mag * 1000
-    ).addTo(map);
-
-    markers[quake.code] = L.marker([quake.lat, quake.lng])
-      .addTo(map)
-      .bindPopup(popupData);
-  };
-
-  // Waits for a whole stream of quakes to come in before setting the map on the
-  // coordinates of the strongest quake.
-  const setViewOnStrongest = (quake) => {
-    map.setView([quake.lat, quake.lng], 7);
-  };
+  let quakesStream;
 
   this.$onInit = () => {
-    map = L.map('map');
-    markers = {};
-    circles = {};
+    let map = L.map('map');
+    let markers = {};
+    let circles = {};
+
+    const drawQuake = (quake) => {
+      const popupData = '' +
+        '<h3>' + quake.place + '</h3>' +
+        '<ul>' +
+          '<li><strong>Time:</strong> ' +
+            new Date(quake.time).toUTCString() +
+          '</li>' +
+          '<li><strong>Magnitude:</strong> ' + quake.mag + '</li>' +
+        '</ul>';
+
+      circles[quake.code] = L.circle(
+        [quake.lat, quake.lng],
+        quake.mag * 1000
+      ).addTo(map);
+
+      markers[quake.code] = L.marker([quake.lat, quake.lng])
+        .addTo(map)
+        .bindPopup(popupData);
+    };
+
 
     L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: `
@@ -54,20 +46,19 @@ function MapController(L, quakesService){
 
     map.setView([0, 0], 7);
 
-    const quakesStream = quakesService.getQuakesStream();
-
-    quakesStream
-      .scan(strongestSoFar)
-      .sample(250)
-      .subscribe(setViewOnStrongest);
-
-    quakesStream.subscribe(drawQuake);
+    quakesStream = quakesService
+      .getQuakesStream()
+      .subscribe(drawQuake);
 
     radioFilterSubject.subscribe((quake) => {
       if (quake){
         map.setView([quake.lat, quake.lng], 7);
       }
     });
+  };
+
+  this.$onDestroy = () => {
+    quakesStream.dispose();
   };
 }
 
