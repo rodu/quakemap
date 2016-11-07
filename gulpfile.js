@@ -30,12 +30,11 @@ gulp.task('concat-scripts', function () {
       './lib/angular.min.js',
       './lib/angular-datatables.min.js',
       './lib/angular-datatables.bootstrap.min.js',
-      'rc="./lib/bootstrap.min.js"></sc',
-      './lib/lodash.min.js',
+      //'./lib/bootstrap.min.js',
       './lib/rx.all.min.js',
       './lib/rx.dom.min.js',
-      './lib/ie10-viewport-bug-workaround.js',
-      './lib/leaflet.js'
+      './lib/leaflet.js',
+      './lib/polyfill.min.js'
     ])
     .pipe(concat('vendors.bundle.js'))
     .pipe(gulp.dest('.'));

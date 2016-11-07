@@ -9,10 +9,9 @@ import radioFilterSubject from './radioFilterSubject';
 */
 ViewSelectorController.$inject = [
   'quakesService',
-  'lodash',
   'jquery'
 ];
-function ViewSelectorController(quakesService, _, $){
+function ViewSelectorController(quakesService, $){
 
   this.$onInit = () => {
     const quakesStream = quakesService.getQuakesStream();
