@@ -1,16 +1,24 @@
+import { FETCH_INTERVAL } from '../settings';
+
 /**
 * @ngdoc directive
 * @name dashboard.directive:metadataInfo
 * @description
 * Description of the metadataInfo directive.
 */
-MetadataInfoController.$inject = ['$timeout', '$filter', 'quakesService'];
-function MetadataInfoController($timeout, $filter, quakesService){
+MetadataInfoController.$inject = [
+  '$timeout',
+  '$interval',
+  '$filter',
+  'quakesService'
+];
+function MetadataInfoController($timeout, $interval, $filter, quakesService){
   let onMetadataUpdate;
 
   this.$onInit = () => {
     const quakeStream = quakesService.getStreamMetadata();
     const dateFilter = $filter('date');
+    let countdownPromise;
 
     onMetadataUpdate = quakeStream.subscribe((metadata) => {
       // We must use a $timeout here to hook into the Angular digest cycle
@@ -20,6 +28,20 @@ function MetadataInfoController($timeout, $filter, quakesService){
           'MMM dd, yyyy - HH:mm UTCZ'
         );
       });
+
+      if (countdownPromise){
+        this.updateCountdown = '00:00:00';
+        $interval.cancel(countdownPromise);
+      }
+
+      countdownPromise = $interval((tickValue) => {
+        //this.updateCountdown = (FETCH_INTERVAL / 1000) - tickValue;
+        this.updateCountdown = dateFilter(
+          FETCH_INTERVAL - tickValue * 1000,
+          'HH:mm:ss'
+        );
+      }, 1000);
+
     });
   };
 
@@ -30,7 +52,10 @@ function MetadataInfoController($timeout, $filter, quakesService){
 
 const metadataInfo = {
   template: `
-    <span><strong>Last update: </strong>{{metadataInfo.lastUpdateTime}}</span>
+    <span ng-show="metadataInfo.lastUpdateTime">
+      <strong>Last update: </strong>{{metadataInfo.lastUpdateTime}}
+       - <strong>Next update</strong>: {{metadataInfo.updateCountdown}}
+    </span>
   `,
   controller: MetadataInfoController,
   controllerAs: 'metadataInfo',
