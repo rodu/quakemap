@@ -1,0 +1,42 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": 1,
+    "jasmine": 1
+  },
+  "globals": {
+    "angular": 1,
+    "inject": 1,
+    "musicamiaMocks": 1
+  },
+  "extends": "google",
+  "rules": {
+    "no-console": 0,
+    "comma-dangle": ["error", "never"],
+    "no-nested-ternary": 0,
+    "func-names": 0,
+    "semi": "error",
+    "padded-blocks": 0,
+    "spaced-comment": 0,
+    "valid-jsdoc": 0,
+    "require-jsdoc": 0,
+    "arrow-parens": ["error", "always"],
+    "space-before-blocks": ["error", {
+      "functions": "never",
+      "keywords": "never",
+      "classes": "always"
+    }],
+    "one-var": ["error", {
+        "var": "always",
+        "let": "never",
+        "const": "never"
+    }],
+    "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+    "object-curly-spacing": ["error", "always"],
+    "quotes": ["error", "single"],
+    "quote-props": ["error", "as-needed"]
+  }
+}
