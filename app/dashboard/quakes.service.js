@@ -8,18 +8,28 @@ function quakesService(Rx){
     'http://localhost:8080/all_day.geojsonp'
   );
 
-  function getQuakesStream(){
-    const jsonStream = () => {
-      return Rx.DOM.jsonpRequest({
-        url: QUAKE_URL,
-        jsonpCallback: 'eqfeed_callback'
-      });
-    };
+  const jsonStream = () => {
+    return Rx.DOM.jsonpRequest({
+      url: QUAKE_URL,
+      jsonpCallback: 'eqfeed_callback'
+    });
+  };
 
-    const quakeStream = Rx.Observable
+  const quakeStream = Rx.Observable
       .interval(FETCH_INTERVAL)
       .startWith(1)
-      .flatMap(() => jsonStream())
+      .flatMap(() => jsonStream());
+
+  function getStreamMetadata(){
+    return quakeStream
+      .flatMap((result) => {
+        return Rx.Observable.return(result.response.metadata);
+        //return Rx.Observable.return({ generated: Date.now() });
+      });
+  }
+
+  function getQuakesStream(){
+    return quakeStream
       .flatMap((result) => {
         return Rx.Observable.from(result.response.features);
       })
@@ -41,12 +51,11 @@ function quakesService(Rx){
       .filter((quake) => {
         return quake.mag >= 1;
       });
-
-    return quakeStream;
   };
 
   return {
-    getQuakesStream
+    getQuakesStream,
+    getStreamMetadata
   };
 }
 
