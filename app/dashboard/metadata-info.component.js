@@ -38,7 +38,8 @@ function MetadataInfoController($timeout, $interval, $filter, quakesService){
         //this.updateCountdown = (FETCH_INTERVAL / 1000) - tickValue;
         this.updateCountdown = dateFilter(
           FETCH_INTERVAL - tickValue * 1000,
-          'HH:mm:ss'
+          'HH:mm:ss',
+          '+000'
         );
       }, 1000);
 
