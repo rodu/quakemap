@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "gulp",
-    "start": "gulp development"
+    "build": "npm install && gulp",
+    "start": "npm install && gulp development"
   },
   "keywords": [],
   "author": "",
